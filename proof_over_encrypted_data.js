@@ -41,9 +41,11 @@ export function decryptText(encryptedText) {
 
 const plainText_Medication = "Medication X";
 const plainText_Personal_Info = "Personal Info Y";
+const plainText_Diagnosis = "Diagnosis Info";
 
 const encrypted_Medication = encryptText(plainText_Medication)
 const encrypted_Personal_Info = encryptText(plainText_Personal_Info)
+const encrypted_Diagnosis= encryptText(plainText_Diagnosis)
 // encryptedText will be returned as Buffer
 // in order to see it in more readble form, convert it to base64
 //console.log('encrypted text1: ', encryptedText_1.toString('base64'))
@@ -52,9 +54,16 @@ const encrypted_Personal_Info = encryptText(plainText_Personal_Info)
 
 const encrypted_Medication_string = encrypted_Medication.toString('base64')
 const encrypted_Personal_Info_string= encrypted_Personal_Info.toString('base64')
+const encrypted_encrypted_Diagnosis_string= encrypted_Diagnosis.toString('base64')
 
 
 //console.log(typeof(encryptedText_2_string))
+
+
+
+
+// all encrypted data is commming from blockchain
+
 
 
 //Generate a new key pair
@@ -64,6 +73,7 @@ const keyPair = await generateBls12381G2KeyPair();
 const messages = [
   Uint8Array.from(Buffer.from(encrypted_Medication_string, "base64")),
   Uint8Array.from(Buffer.from(encrypted_Personal_Info_string, "base64")),
+  Uint8Array.from(Buffer.from(encrypted_encrypted_Diagnosis_string, "base64")),
 ];
 
 //Create the signature
@@ -79,13 +89,13 @@ const isVerified = await blsVerify({
   signature,
 });
 
-//Derive a proof from the signature revealing the first message
+//Derive a proof from the signature revealing the first message (medication)
 const proof = await blsCreateProof({
   signature,
   publicKey: keyPair.publicKey,
   messages,
   nonce: Uint8Array.from(Buffer.from("nonce", "utf8")),
-  revealed: [0],
+  revealed: [0], //medication to reveal
 });
 
 //Verify the created proof
