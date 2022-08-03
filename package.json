@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@mattrglobal/bbs-signatures": "^1.1.0"
+  }
+}
